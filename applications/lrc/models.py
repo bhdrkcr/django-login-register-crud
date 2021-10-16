@@ -5,8 +5,13 @@ import uuid
 # Django
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
+from django.contrib.sites.models import Site
+from django.core.mail import send_mail
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+
+__all__ = ['User', 'Register']
 
 
 class UserManager(BaseUserManager):
@@ -44,7 +49,7 @@ class UserManager(BaseUserManager):
 
 def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
-    filename = '%s.%s' % (uuid.uuid4(), ext)
+    filename = f'{uuid.uuid4()}.{ext}'
     return os.path.join('users/avatars', filename)
 
 
@@ -68,7 +73,6 @@ class User(AbstractUser):
         blank=True,
         null=True,
     )
-    is_manager = models.BooleanField(_('is user manager'), default=False)
 
     def __str__(self):
         return self.email
@@ -84,3 +88,23 @@ class User(AbstractUser):
             return self.avatar.url
         else:
             return None
+
+
+class Register(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def send_registration_mail(self):
+        current_site = Site.objects.get_current()
+        send_mail(
+            _("Verification for email"),
+            _("click here to verify: ")
+            + current_site.domain
+            + reverse(
+                "lrc:registration-verify",
+                kwargs={"verification_key": self.uuid},
+            ),
+            "app@gmail.com",
+            [self.user.email],
+            fail_silently=False,
+        )
