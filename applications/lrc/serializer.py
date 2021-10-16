@@ -17,7 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
             'is_staff',
             'is_active',
             'is_validated',
-            'email',
             'groups',
             'user_permissions',
             'last_login',
@@ -28,7 +27,10 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data, is_active=False)
+        register = Register.objects.create(user=user)
+        register.send_registration_mail()
+        return user
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -43,10 +45,3 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Register
         fields = '__all__'
-        read_only_fields = (
-            'uuid',
-            'user_id',
-        )
-
-    def create(self, validated_data):
-        return Register.objects.create(**validated_data)
