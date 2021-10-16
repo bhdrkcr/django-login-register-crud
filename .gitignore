@@ -260,3 +260,6 @@ Temporary Items
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,macos,django
+.pylintrc
+.flake8
+.isort.cfg

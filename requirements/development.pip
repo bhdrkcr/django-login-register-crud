@@ -1,0 +1,23 @@
+-r base.pip
+pytest
+pytest-cov
+pytest-django
+mixer
+black
+flake8
+flake8-bandit
+flake8-blind-except
+flake8-bugbear
+flake8-builtins
+flake8-polyfill
+flake8-print
+flake8-quotes
+flake8-string-format
+isort
+pylint
+ipython
+flake8-return
+ipdb
+pretty-errors
+django-debug-toolbar
+django-extensions
