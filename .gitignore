@@ -263,3 +263,4 @@ Temporary Items
 .pylintrc
 .flake8
 .isort.cfg
+.vscode/*
