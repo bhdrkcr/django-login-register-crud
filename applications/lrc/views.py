@@ -39,7 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return super().get_queryset()
 
 
-class VerificationViewSet(viewsets.ModelViewSet):
+class VerificationViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A ViewSet for verification.
     """
@@ -52,7 +52,7 @@ class VerificationViewSet(viewsets.ModelViewSet):
             self.permission_classes = [permissions.AllowAny]
         else:
             self.permission_classes = [permissions.IsAdminUser]
-        return super(UserViewSet, self).get_permissions()
+        return super(VerificationViewSet, self).get_permissions()
 
     def retrieve(self, request, *args, **kwargs):
         registration = get_object_or_404(self.queryset, pk=kwargs['pk'])

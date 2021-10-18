@@ -32,14 +32,6 @@ class UserSerializer(serializers.ModelSerializer):
         register.send_registration_mail()
         return user
 
-    def update(self, instance, validated_data):
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.is_validated = validated_data.get('is_validated', instance.is_validated)
-        instance.set_password = validated_data.get('password', instance.password)
-        instance.save()
-        return instance
-
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:

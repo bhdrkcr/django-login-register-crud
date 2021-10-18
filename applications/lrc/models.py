@@ -97,12 +97,7 @@ class Register(models.Model):
         current_site = Site.objects.get_current()
         send_mail(
             _("Verification for email"),
-            _("click here to verify: ")
-            + current_site.domain
-            + reverse(
-                "lrc:registration-verify",
-                kwargs={"verification_key": self.uuid},
-            ),
+            _("click here to verify: ") + current_site.domain + "verification_key" + str(self.uuid),
             "app@gmail.com",
             [self.user.email],
             fail_silently=False,
